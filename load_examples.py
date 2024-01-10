@@ -5,14 +5,6 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset
 
-"""
-读取一个样本的xml标签信息
-输入： xml路径
-输出：1. 样本中所有事件的类别列表，形状为：[1,2,...]
-     2. 样本中所有事件的起止位置，形状为：[[1,2],[3,4],...]
-     3. 样本是否存在困难事件
-"""
-
 
 def parse_xml(xml_path):
     tree = ET.parse(xml_path)
@@ -34,19 +26,6 @@ def parse_xml(xml_path):
                 # 只要样本存在困难事件，则标记该样本为困难
                 flag = int(item.text)
     return class_list, box_list, flag
-
-
-"""
-输入：1. app_idx，设备号
-     2. 所在数据集名称（redd或ukdale）
-     3. partition，数据集中训练样本截止索引、验证样本截止索引、测试样本截止索引，eg：[322, 374, 1393]
-     4. flag：数据集标签（train，val或test）
-输出：样本列表，列表中每个样本的信息也组织为一个列表，分别是：
-    1. 样本索引：该样本在数据集中的索引，主要用于错例分析
-    2. 功率序列：样本对应的总线功率序列，形状为[[1,2,...]]
-    3. 所有事件的类别列表：输出形式同parse_xml()
-    4. 所有事件的位置列表：输出形式同parse_xml()
-"""
 
 
 def read_data(app_idx, dataset, partition, flag="train", only_events=True):

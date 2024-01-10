@@ -19,9 +19,6 @@ def train_one_appliance(set_name, app_name, method, info, config):
     n_class = info['n_class'][set_name][app_name]
     amplitude_threshold = info["amplitude_threshold"][set_name][app_name]
     stable_threshold = info["stable_threshold"][set_name][app_name]
-    # 设备的数据主目录，eg: ./data/ukdale/data8
-    # data_dir = Path(f"data/source/{set_name}/data{app_idx}")
-    # interval_path =  data_dir / "ImageSets" / "interval.txt"
     set_dir = Path(f"nilm_events_simple/{set_name}")
     intervals = np.loadtxt(set_dir / f"channel_{str(app_idx)}" / "interval.txt")
     print("当前设备是：", app_name, "设备号是：", app_idx, flush=True)
@@ -140,9 +137,9 @@ def train(dataset, app, method):
     with open('nilm_events_simple/metadata.json', 'r') as file:
         info = json.load(file)
     if method == 'sl':
-        config = SlConfig(batch_size=4096)
+        config = SlConfig(batch_size=4096, epochs=200, lr_drop=160)
     elif method == 'yolo':
-        config = YoloConfig(batch_size=2048)
+        config = YoloConfig(batch_size=2048, epochs=200, lr_drop=160)
     else:
         config = GenConfig()
     if dataset == 'all':
